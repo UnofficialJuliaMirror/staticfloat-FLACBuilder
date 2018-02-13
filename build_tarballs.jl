@@ -6,8 +6,8 @@ platforms = [
   BinaryProvider.Linux(:i686, :glibc),
   BinaryProvider.Linux(:x86_64, :glibc),
   #BinaryProvider.Linux(:aarch64, :glibc),
-  BinaryProvider.Linux(:armv7l, :glibc),
-  BinaryProvider.Linux(:powerpc64le, :glibc),
+  #BinaryProvider.Linux(:armv7l, :glibc),
+  #BinaryProvider.Linux(:powerpc64le, :glibc),
   BinaryProvider.MacOS()
 ]
 
