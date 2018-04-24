@@ -10,13 +10,12 @@ sources = [
 script = raw"""
 cd $WORKSPACE/srcdir/flac-1.3.2
 
-# We need to add ${prefix}/lib onto the end of $LD_LIRBARY_PATH because ./configure
-# here is going to try and run programs that link against libogg, but don't set their
-# RPATH's properly.  Le sigh.
-#export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${prefix}/lib
+# For programs with older configure steps, we often need to update and regenerate them
+update_configure_scripts
+autoreconf -i -f
 
 # Do the building dance
-./configure --prefix=${prefix} --host=${target} --disable-avx --enable-ogg --disable-oggtest
+./configure --prefix=${prefix} --host=${target} --disable-avx
 make -j${nproc} V=1
 make install
 """
@@ -24,21 +23,30 @@ make install
 # These are the platforms we will build for by default, unless further
 # platforms are passed in on the command line.
 platforms = [
+    # Windows
     Windows(:i686),
     Windows(:x86_64),
+
+    # Hello linux my old friend
     Linux(:i686, :glibc),
     Linux(:x86_64, :glibc),
-    # These don't work yet
-    #Linux(:aarch64, :glibc),
-    #Linux(:armv7l, :glibc),
-    #Linux(:powerpc64le, :glibc),
+    Linux(:aarch64, :glibc),
+    Linux(:armv7l, :glibc),
+    Linux(:powerpc64le, :glibc),
+
+    # Add some musl love
+    Linux(:i686, :musl),
+    Linux(:x86_64, :musl),
+
+    # The BSD's (FreeBSD put on hold until we fix the -fPIC debacle)
+    #FreeBSD(:x86_64),
     MacOS(),
 ]
 
 
 dependencies = [
     # We want libogg to power up our FLAC
-    "https://github.com/staticfloat/OggBuilder/releases/download/v1.3.3-2/build.jl",
+    "https://github.com/staticfloat/OggBuilder/releases/download/v1.3.3-3/build.jl",
 ]
 
 # The products that we will ensure are always built
