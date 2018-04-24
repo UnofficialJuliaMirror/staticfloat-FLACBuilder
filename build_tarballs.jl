@@ -13,10 +13,10 @@ cd $WORKSPACE/srcdir/flac-1.3.2
 # We need to add ${prefix}/lib onto the end of $LD_LIRBARY_PATH because ./configure
 # here is going to try and run programs that link against libogg, but don't set their
 # RPATH's properly.  Le sigh.
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${prefix}/lib
+#export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${prefix}/lib
 
 # Do the building dance
-./configure --prefix=${prefix} --host=${target} --disable-avx
+./configure --prefix=${prefix} --host=${target} --disable-avx --enable-ogg --disable-oggtest
 make -j${nproc} V=1
 make install
 """
@@ -37,17 +37,13 @@ platforms = [
 
 
 dependencies = [
-    # We need libogg to build FLAC
-    "https://github.com/staticfloat/OggBuilder/releases/download/v1.3.3-0/build.jl"
+    # We want libogg to power up our FLAC
+    "https://github.com/staticfloat/OggBuilder/releases/download/v1.3.3-2/build.jl",
 ]
 
 # The products that we will ensure are always built
 products = prefix -> [
-    LibraryProduct(prefix, "libflac", :libflac),
-]
-
-# Dependencies that must be installed before this package can be built
-dependencies = [
+    LibraryProduct(prefix, "libFLAC", :libflac),
 ]
 
 build_tarballs(ARGS, "FLAC", sources, script, platforms, products, dependencies)
