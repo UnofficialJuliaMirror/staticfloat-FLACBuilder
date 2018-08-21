@@ -29,7 +29,7 @@ platforms = supported_platforms()
 
 dependencies = [
     # We want libogg to power up our FLAC
-    "https://github.com/staticfloat/OggBuilder/releases/download/v1.3.3-4/build.jl",
+    "https://github.com/staticfloat/OggBuilder/releases/download/v1.3.3-7/build.jl",
 ]
 
 # The products that we will ensure are always built
